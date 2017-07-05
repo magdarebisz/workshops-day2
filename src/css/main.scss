@@ -1,0 +1,156 @@
+@import 'normalize';
+
+* {
+  box-sizing: border-box;
+  font-family: Roboto-Regular;
+  letter-spacing: 0.04rem;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: #e6e6e6;
+}
+
+body {
+  height: 100vh;
+  background: url('/src/assets/images/5938870365_a0c951015b_o.jpg') no-repeat center center fixed;
+  background-size: cover;
+  transition: background-image 1s ease-in-out;
+}
+
+.progressbar-container {
+  height: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.progressbar {
+  width: 400px;
+  height: 400px;
+  position: relative;
+
+  .inner-bar {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border: 2px solid #e6e6e6;
+    border-radius: 100px;
+    margin: auto;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+}
+
+i {
+  color: #e6e6e6;
+}
+
+.playPauseBtns {
+  width: 15px;
+  height: 15px;
+  transition: opacity 0.5s ease-in-out;
+}
+
+@mixin center-horizontally($top) {
+  position: absolute;
+  top: $top;
+  left: 50%;
+  transform: translate3D(-50%, -$top, 0);
+}
+
+
+@mixin center-vertically($value) {
+  position: absolute;
+  top: 50%;
+  left: $value;
+  transform: translate3D(-$value, -50%, 0);
+}
+
+.play {
+  @extend .playPauseBtns;
+  opacity: 0;
+
+  &:before {
+    @include center-horizontally(90%);
+  }
+}
+
+.pause {
+  @extend .playPauseBtns;
+
+  &:before {
+    @include center-horizontally(90%);
+  }
+}
+
+.forward {
+  width: 15px;
+  height: 15px;
+
+  &:before {
+    @include center-vertically(90%);
+  }
+}
+
+.backward {
+  width: 15px;
+  height: 15px;
+
+  &:before {
+    @include center-vertically(10%);
+  }
+}
+
+.time {
+  display: block;
+  margin: auto;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  text-align: center;
+}
+
+.title {
+  display: block;
+  margin: auto;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  text-align: center;
+}
+
+.author {
+  display: block;
+  margin: auto;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  text-align: center;
+}
+
+.progress {
+  position: absolute;
+  transform: rotate(-90deg);
+}
+
+.progress__meter,
+.progress__value {
+  fill: none;
+}
+
+.progress__meter {
+  stroke: #e6e6e6;
+}
+
+.progress__value {
+  stroke: #f77a52;
+  transition: stroke-dashoffset 0.5s linear;
+}
