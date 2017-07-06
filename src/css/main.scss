@@ -1,139 +1,49 @@
 @import 'normalize';
 
-* {
-  box-sizing: border-box;
-  font-family: Roboto-Regular;
-  letter-spacing: 0.04rem;
-  font-size: 1.1rem;
-  font-weight: 400;
-  color: #e6e6e6;
-}
-
-body {
-  height: 100vh;
-  background: url('/src/assets/images/5938870365_a0c951015b_o.jpg') no-repeat center center fixed;
-  background-size: cover;
-  transition: background-image 1s ease-in-out;
-}
-
-.progressbar-container {
-  height: 100%;
-  align-items: center;
-  display: flex;
-  justify-content: center;
-}
-
-.progressbar {
-  width: 400px;
-  height: 400px;
-  position: relative;
-
-  .inner-bar {
-    position: absolute;
-    width: 200px;
-    height: 200px;
-    border: 2px solid #e6e6e6;
-    border-radius: 100px;
-    margin: auto;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-  }
-}
-
-i {
-  color: #e6e6e6;
-}
-
-.playPauseBtns {
-  width: 15px;
-  height: 15px;
-  transition: opacity 0.5s ease-in-out;
-}
+$main-color: #e6e6e6;
 
 @mixin center-horizontally($top) {
+  left: 50%;
   position: absolute;
   top: $top;
-  left: 50%;
   transform: translate3D(-50%, -$top, 0);
 }
 
 
 @mixin center-vertically($value) {
+  left: $value;
   position: absolute;
   top: 50%;
-  left: $value;
   transform: translate3D(-$value, -50%, 0);
 }
 
-.play {
-  @extend .playPauseBtns;
-  opacity: 0;
-
-  &:before {
-    @include center-horizontally(90%);
-  }
-}
-
-.pause {
-  @extend .playPauseBtns;
-
-  &:before {
-    @include center-horizontally(90%);
-  }
-}
-
-.forward {
-  width: 15px;
+.playPauseBtns {
   height: 15px;
-
-  &:before {
-    @include center-vertically(90%);
-  }
-}
-
-.backward {
+  transition: opacity 0.5s ease-in-out;
   width: 15px;
-  height: 15px;
-
-  &:before {
-    @include center-vertically(10%);
-  }
 }
 
-.time {
-  display: block;
-  margin: auto;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  width: 100%;
-  text-align: center;
+* {
+  box-sizing: border-box;
+  color: $main-color;
+  font-family: Roboto-Regular;
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: 0.04rem;
 }
 
-.title {
-  display: block;
-  margin: auto;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  width: 100%;
-  text-align: center;
+body {
+  background-size: cover;
+  background: url('/src/assets/images/5938870365_a0c951015b_o.jpg') no-repeat center center fixed;
+  height: 100vh;
+  transition: background-image 1s ease-in-out;
 }
 
-.author {
-  display: block;
-  margin: auto;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  width: 100%;
-  text-align: center;
+.player {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
 }
 
 .progress {
@@ -147,10 +57,102 @@ i {
 }
 
 .progress__meter {
-  stroke: #e6e6e6;
+  stroke: $main-color;
 }
 
 .progress__value {
   stroke: #f77a52;
   transition: stroke-dashoffset 0.5s linear;
+}
+
+.controls {
+  height: 400px;
+  position: relative;
+  width: 400px;
+}
+
+i {
+  color: $main-color;
+}
+
+.controls__play {
+  @extend .playPauseBtns;
+  opacity: 0;
+
+  &:before {
+    @include center-horizontally(90%);
+  }
+}
+
+.controls__pause {
+  @extend .playPauseBtns;
+
+  &:before {
+    @include center-horizontally(90%);
+  }
+}
+
+.controls__forward {
+  height: 15px;
+  width: 15px;
+
+  &:before {
+    @include center-vertically(90%);
+  }
+}
+
+.controls__backward {
+  height: 15px;
+  width: 15px;
+
+  &:before {
+    @include center-vertically(10%);
+  }
+}
+
+.audio-info {
+  align-items: center;
+  border-radius: 100px;
+  border: 2px solid $main-color;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+  justify-content: center;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 200px;
+}
+
+.audio-info__time {
+  display: block;
+  margin: auto;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.audio-info__title {
+  display: block;
+  margin: auto;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.audio-info__author {
+  display: block;
+  margin: auto;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
 }

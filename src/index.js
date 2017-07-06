@@ -1,14 +1,14 @@
 const audio = document.querySelector('.audio');
-const playBtn = document.querySelector('.play');
-const pauseBtn = document.querySelector('.pause');
-const prevBtn = document.querySelector('.backward');
-const nextBtn = document.querySelector('.forward');
-const time = document.querySelector('.time');
-const title = document.querySelector('.title');
-const author = document.querySelector('.author');
+const playBtn = document.querySelector('.controls__play');
+const pauseBtn = document.querySelector('.controls__pause');
+const prevBtn = document.querySelector('.controls__backward');
+const nextBtn = document.querySelector('.controls__forward');
+const time = document.querySelector('.audio-info__time');
+const title = document.querySelector('.audio-info__title');
+const author = document.querySelector('.audio-info__author');
 const progressValue = document.querySelector('.progress__value');
 const body = document.querySelector('body');
-const container = document.querySelector('.progressbar');
+const container = document.querySelector('.controls');
 
 const RADIUS = 198;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
