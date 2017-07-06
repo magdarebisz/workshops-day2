@@ -5,9 +5,9 @@ const playBtn = document.querySelector('.controls__play');
 const pauseBtn = document.querySelector('.controls__pause');
 const prevBtn = document.querySelector('.controls__backward');
 const nextBtn = document.querySelector('.controls__forward');
-const time = document.querySelector('.audio-info__time');
-const title = document.querySelector('.audio-info__title');
-const author = document.querySelector('.audio-info__author');
+const timeInfo = document.querySelector('.audio-info__time');
+const titleInfo = document.querySelector('.audio-info__title');
+const authorInfo = document.querySelector('.audio-info__author');
 const progressValue = document.querySelector('.progress__value');
 const body = document.querySelector('body');
 
@@ -71,9 +71,9 @@ const updateBackground = () => {
 };
 
 const updateTitleAndAuthor = () => {
-  const meta = songs[currentSongIndex];
-  title.innerHTML = meta.title;
-  author.innerHTML = meta.author;
+  const { title, author } = songs[currentSongIndex];
+  titleInfo.innerHTML = title;
+  authorInfo.innerHTML = author;
 };
 
 const prevSong = () => {
@@ -120,7 +120,7 @@ const getMetaSong = (path) => {
 
 const showTime = () => {
   const { duration, currentTime } = audio;
-  time.innerHTML = duration ? `-${parseInt(duration - currentTime, 10)} sec` : '\u00A0';
+  timeInfo.innerHTML = duration ? `-${parseInt(duration - currentTime, 10)} sec` : '\u00A0';
 };
 
 const progress = (value) => {
