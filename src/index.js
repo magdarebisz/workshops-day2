@@ -144,13 +144,17 @@ const extractLinks = (data) => {
   return links;
 };
 
+const timeUpdateHandler = () => {
+  showTime();
+  updateProgress();
+};
+
 playBtn.addEventListener('click', playAudio);
 pauseBtn.addEventListener('click', playAudio);
 prevBtn.addEventListener('click', prevSong);
 nextBtn.addEventListener('click', nextSong);
-audio.addEventListener('timeupdate', showTime);
+audio.addEventListener('timeupdate', timeUpdateHandler);
 audio.addEventListener('ended', autoPlayNextSong);
-audio.addEventListener('timeupdate', updateProgress);
 
 fetch(songsFolder, {
   method: 'get',
