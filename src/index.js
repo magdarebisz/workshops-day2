@@ -1,3 +1,5 @@
+/* eslint-disable no-plusplus */
+
 const audio = document.querySelector('.audio');
 const playBtn = document.querySelector('.controls__play');
 const pauseBtn = document.querySelector('.controls__pause');
@@ -8,7 +10,6 @@ const title = document.querySelector('.audio-info__title');
 const author = document.querySelector('.audio-info__author');
 const progressValue = document.querySelector('.progress__value');
 const body = document.querySelector('body');
-const container = document.querySelector('.controls');
 
 const RADIUS = 198;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
@@ -19,12 +20,6 @@ const imagesFolder = 'src/assets/images';
 const songs = [];
 const backgrounds = [];
 let currentSongIndex;
-
-// sprawdz ułożenie przycisków sterowania
-// css alfabetycznie
-// funkcje js kontekstowo
-// sprawdzić css - poprawność
-// sformatuj kod, eslint ?
 
 const assignPath = ({ path }) => {
   audio.src = path;
@@ -40,7 +35,7 @@ const play = () => {
 
 const pause = () => {
   audio.pause();
-}
+};
 
 const loadFirstSong = () => {
   if (!audio.querySelector('source[src$=mp3]')) {
@@ -61,7 +56,7 @@ const showPlayBtn = () => {
 };
 
 const playAudio = () => {
-  if (audio.paused){
+  if (audio.paused) {
     play();
     showPauseBtn();
   } else {
@@ -75,6 +70,12 @@ const updateBackground = () => {
   body.style.backgroundSize = 'cover';
 };
 
+const updateTitleAndAuthor = () => {
+  const meta = songs[currentSongIndex];
+  title.innerHTML = meta.title;
+  author.innerHTML = meta.author;
+};
+
 const prevSong = () => {
   setUpNewIndex(--currentSongIndex);
   if (currentSongIndex < 0) {
@@ -82,7 +83,7 @@ const prevSong = () => {
   }
   assignPath(songs[currentSongIndex]);
   play();
-  upateTitleAndAuthor();
+  updateTitleAndAuthor();
   updateBackground();
 };
 
@@ -91,19 +92,19 @@ const nextSong = () => {
   if (currentSongIndex === songs.length) {
     currentSongIndex = 0;
   }
-  assignPath(songs[currentSongIndex])
+  assignPath(songs[currentSongIndex]);
   play();
   updateBackground();
-  upateTitleAndAuthor()
+  updateTitleAndAuthor();
 };
 
 const autoPlayNextSong = () => {
-  assignPath(songs[++currentSongIndex])
+  assignPath(songs[++currentSongIndex]);
   play();
   if (currentSongIndex === songs.length - 1) {
     setUpNewIndex(0);
   }
-  upateTitleAndAuthor();
+  updateTitleAndAuthor();
   updateBackground();
 };
 
@@ -119,18 +120,18 @@ const getMetaSong = (path) => {
 
 const showTime = () => {
   const { duration, currentTime } = audio;
-  time.innerHTML = duration ? `-${parseInt(audio.duration - audio.currentTime)} sec` : '\u00A0';
+  time.innerHTML = duration ? `-${parseInt(duration - currentTime, 10)} sec` : '\u00A0';
+};
+
+const progress = (value) => {
+  const progressOffset = value / 100;
+  const dashoffset = CIRCUMFERENCE * (1 - progressOffset);
+  progressValue.style.strokeDashoffset = dashoffset;
 };
 
 const updateProgress = () => {
   const progressPercentage = (audio.currentTime / audio.duration) * 100;
   progress(progressPercentage);
-}
-
-const progress = (value) => {
-  const progress = value / 100;
-  const dashoffset = CIRCUMFERENCE * (1 - progress);
-  progressValue.style.strokeDashoffset = dashoffset;
 };
 
 progressValue.style.strokeDasharray = CIRCUMFERENCE;
@@ -151,50 +152,32 @@ audio.addEventListener('timeupdate', showTime);
 audio.addEventListener('ended', autoPlayNextSong);
 audio.addEventListener('timeupdate', updateProgress);
 
-
-// powyzej tego jest ok
-
-const upateTitleAndAuthor = () => {
-  const meta = songs[currentSongIndex];
-  // czemu tutaj nie działa destrukturyzacja const {title, author} = metaSongs[currentSongIndex];
-  title.innerHTML = meta.title;
-  author.innerHTML = meta.author;
-};
-
-// poniżej ajax zapytania o nazwy images/songs
-
 fetch(songsFolder, {
   method: 'get',
-}).then((response) => {
-  return response.text();
-}).then((text) => {
-  const links = extractLinks(text);
-  links.forEach((link) => {
-    if (link.href.indexOf('mp3') > -1) {
-      const metaSong = getMetaSong(link.href);
-      const path = link.href;
-      const result = { path, ...metaSong };
-      songs.push(result);
-    }
-  });
-  loadFirstSong();
-  upateTitleAndAuthor();
-  showTime();
-}).catch((error) => {
-  ('error');
-});
+}).then(response => response.text())
+  .then((text) => {
+    const links = extractLinks(text);
+    links.forEach((link) => {
+      if (link.href.indexOf('mp3') > -1) {
+        const metaSong = getMetaSong(link.href);
+        const path = link.href;
+        const result = { path, ...metaSong };
+        songs.push(result);
+      }
+    });
+    loadFirstSong();
+    updateTitleAndAuthor();
+    showTime();
+  }).catch(error => console.error('error', error)); // eslint-disable-line no-console
 
 fetch(imagesFolder, {
   method: 'get',
-}).then((response) => {
-  return response.text();
-}).then((text) => {
-  const links = extractLinks(text);
-  links.forEach((link) => {
-    if (link.href.indexOf('jpg') > -1) {
-      backgrounds.push(link.href.substring(link.href.indexOf('/src')));
-    }
-  });
-}).catch((error) => {
-  ('error');
-});
+}).then(response => response.text())
+  .then((text) => {
+    const links = extractLinks(text);
+    links.forEach((link) => {
+      if (link.href.indexOf('jpg') > -1) {
+        backgrounds.push(link.href.substring(link.href.indexOf('/src')));
+      }
+    });
+  }).catch(error => console.error('error', error)); // eslint-disable-line no-console
