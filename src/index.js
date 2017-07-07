@@ -39,10 +39,7 @@ let currentSongIndex;
 const assignPath = ({ path }) => {
   audio.src = path;
 };
-// 27
-const setUpNewIndex = (index) => {
-  currentSongIndex = index;
-};
+
 // 2
 const play = () => {
   audio.play();
@@ -51,14 +48,7 @@ const play = () => {
 const pause = () => {
   audio.pause();
 };
-// 25
-const loadFirstSong = () => {
-  if (!audio.querySelector('source[src$=mp3]')) {
-    setUpNewIndex(0);
-    assignPath(songs[currentSongIndex]);
-    play();
-  }
-};
+
 // 9
 const showPauseBtn = () => {
   pauseBtn.style.opacity = 1;
@@ -69,69 +59,7 @@ const showPlayBtn = () => {
   playBtn.style.opacity = 1;
   pauseBtn.style.opacity = 0;
 };
-// 8
-const playAudio = () => {
-  if (audio.paused) {
-    play();
-    showPauseBtn();
-  } else {
-    pause();
-    showPlayBtn();
-  }
-};
-// 38
-const updateBackground = () => {
-  body.style.background = `url(${backgrounds[currentSongIndex]}) no-repeat center center fixed`;
-  body.style.backgroundSize = 'cover';
-};
-// 29
-const updateTitleAndAuthor = () => {
-  const { title, author } = songs[currentSongIndex];
-  titleInfo.innerHTML = title;
-  authorInfo.innerHTML = author;
-};
-// 40
-const prevSong = () => {
-  setUpNewIndex(--currentSongIndex);
-  if (currentSongIndex < 0) {
-    currentSongIndex = songs.length - 1;
-  }
-  assignPath(songs[currentSongIndex]);
-  play();
-  updateTitleAndAuthor();
-  updateBackground();
-};
-// 37
-const nextSong = () => {
-  setUpNewIndex(++currentSongIndex);
-  if (currentSongIndex === songs.length) {
-    currentSongIndex = 0;
-  }
-  assignPath(songs[currentSongIndex]);
-  play();
-  updateBackground();
-  updateTitleAndAuthor();
-};
-// 42
-const autoPlayNextSong = () => {
-  assignPath(songs[++currentSongIndex]);
-  play();
-  if (currentSongIndex === songs.length - 1) {
-    setUpNewIndex(0);
-  }
-  updateTitleAndAuthor();
-  updateBackground();
-};
-// 23
-const getMetaSong = (path) => {
-  const extractedInfo = path.replace(/.mp3|http:\/\/localhost:8080\/src\/assets\/audio\//gi, '');
-  const index = extractedInfo.indexOf('-');
-  const result = {
-    author: extractedInfo.substring(0, index),
-    title: extractedInfo.substring(index + 1),
-  };
-  return result;
-};
+
 // 13
 const showTime = () => {
   // const { duration, currentTime } = audio;
@@ -142,19 +70,23 @@ const showTime = () => {
   }
   // timeInfo.innerHTML = duration ? `-${parseInt(duration - currentTime, 10)} sec` : '\u00A0';
 };
+
 // 14
 const progress = (value) => {
   const progressOffset = value / 100;
   const dashoffset = CIRCUMFERENCE * (1 - progressOffset);
   progressValue.style.strokeDashoffset = dashoffset;
 };
+
 // 18
 const updateProgress = () => {
   const progressPercentage = (audio.currentTime / audio.duration) * 100;
   progress(progressPercentage);
 };
+
 // 19
 progressValue.style.strokeDasharray = CIRCUMFERENCE;
+
 // 22
 const extractLinks = (data) => {
   const el = document.createElement('html');
@@ -163,23 +95,109 @@ const extractLinks = (data) => {
   el.remove();
   return links;
 };
+
+// 23
+const getMetaSong = (path) => {
+  const extractedInfo = path.replace(/.mp3|http:\/\/localhost:8080\/src\/assets\/audio\//gi, '');
+  const index = extractedInfo.indexOf('-');
+  const result = {
+    author: extractedInfo.substring(0, index),
+    title: extractedInfo.substring(index + 1),
+  };
+  return result;
+};
+
+// 27
+const setUpNewIndex = (index) => {
+  currentSongIndex = index;
+};
+
+// 25
+const loadFirstSong = () => {
+  if (!audio.querySelector('source[src$=mp3]')) {
+    setUpNewIndex(0);
+    assignPath(songs[currentSongIndex]);
+    play();
+  }
+};
+
+// 29
+const updateTitleAndAuthor = () => {
+  const { title, author } = songs[currentSongIndex];
+  titleInfo.innerHTML = title;
+  authorInfo.innerHTML = author;
+};
+
+// 38
+const updateBackground = () => {
+  body.style.background = `url(${backgrounds[currentSongIndex]}) no-repeat center center fixed`;
+  body.style.backgroundSize = 'cover';
+};
+
+// 8
+const playAudioHandler = () => {
+  if (audio.paused) {
+    play();
+    showPauseBtn();
+  } else {
+    pause();
+    showPlayBtn();
+  }
+};
+
 // 12
 const timeUpdateHandler = () => {
   showTime();
   updateProgress();
 };
+
+// 37
+const nextSongHandler = () => {
+  setUpNewIndex(++currentSongIndex);
+  if (currentSongIndex === songs.length) {
+    currentSongIndex = 0;
+  }
+  assignPath(songs[currentSongIndex]);
+  play();
+  updateBackground();
+  updateTitleAndAuthor();
+};
+
+// 40
+const prevSongHandler = () => {
+  setUpNewIndex(--currentSongIndex);
+  if (currentSongIndex < 0) {
+    currentSongIndex = songs.length - 1;
+  }
+  assignPath(songs[currentSongIndex]);
+  play();
+  updateTitleAndAuthor();
+  updateBackground();
+};
+
+// 42
+const autoPlayNextSongHandler = () => {
+  assignPath(songs[++currentSongIndex]);
+  play();
+  if (currentSongIndex === songs.length - 1) {
+    setUpNewIndex(0);
+  }
+  updateTitleAndAuthor();
+  updateBackground();
+};
+
 // 6
-playBtn.addEventListener('click', playAudio);
+playBtn.addEventListener('click', playAudioHandler);
 // 7
-pauseBtn.addEventListener('click', playAudio);
+pauseBtn.addEventListener('click', playAudioHandler);
 // 35
-prevBtn.addEventListener('click', prevSong);
+prevBtn.addEventListener('click', prevSongHandler);
 // 36
-nextBtn.addEventListener('click', nextSong);
+nextBtn.addEventListener('click', nextSongHandler);
 // 11
 audio.addEventListener('timeupdate', timeUpdateHandler);
 // 41
-audio.addEventListener('ended', autoPlayNextSong);
+audio.addEventListener('ended', autoPlayNextSongHandler);
 // 20
 fetch(songsFolder, {
   method: 'get',
@@ -190,8 +208,7 @@ fetch(songsFolder, {
       if (link.href.indexOf('mp3') > -1) {
         const metaSong = getMetaSong(link.href);
         const path = link.href;
-        const result = Object.assign({}, path, metaSong);
-        // const result = { path, ...metaSong };
+        const result = { path, ...metaSong };
         songs.push(result);
       }
     });
